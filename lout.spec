@@ -11,6 +11,7 @@ Source0:	ftp://ftp.cs.usyd.edu.au/jeff/lout/%{name}-%{version}.tar.bz2
 Patch0:		lout-makefile.patch
 License:	GPL
 Url:		http://lout.sourceforge.net/
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Lout is a high-level language for document formatting.  Lout reads a
