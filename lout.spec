@@ -1,6 +1,6 @@
 %define	name	lout
 %define	version	3.31
-%define	release	%mkrel 5
+%define	release	%mkrel 6
 
 Summary:	The Lout document formatting language
 Name:		%{name}
