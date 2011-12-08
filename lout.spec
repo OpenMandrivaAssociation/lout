@@ -69,7 +69,7 @@ mv $RPM_BUILD_ROOT/usr/man $RPM_BUILD_ROOT%{_datadir}
 
 # remove unwanted files
 rm -rf $RPM_BUILD_ROOT/%_prefix/doc
-rm -rf $RPM_BUILD_DIR/%name-%version/doc/user/.pie_intr.swp
+rm -rf %{_builddir}/%name-%version/doc/user/.pie_intr.swp
 
 %clean
 rm -rf $RPM_BUILD_ROOT
