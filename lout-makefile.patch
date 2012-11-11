@@ -1,0 +1,196 @@
+--- lout-3.29/makefile.orig	2003-08-15 01:08:17.000000000 +0200
++++ lout-3.29/makefile	2004-06-18 16:36:03.526682786 +0200
+@@ -281,10 +281,10 @@
+ # DEBUGGING = 1
+ # TRACING = -g
+ 
+-BINDIR	= /home/jeff/bin
+-LIBDIR	= /home/jeff/lout.lib
+-DOCDIR	= /home/jeff/lout.doc
+-MANDIR	= /home/jeff/lout.man
++BINDIR        = /usr/bin
++LIBDIR        = /usr/lib/lout
++DOCDIR        = /usr/doc/lout
++MANDIR        = /usr/man/man1
+ 
+ LIBFONT = font
+ LIBMAPS = maps
+@@ -296,11 +296,11 @@
+ CHARIN	= 1
+ CHAROUT	= 0
+ 
+-USELOC	= 1
++USELOC	= 0
+ LOC_FR	= fr
+ LOC_DE	= de
+ 
+-COLLATE	= 1
++COLLATE	= 0
+ 
+ PDF_COMPRESSION	= 0
+ ZLIB		=
+@@ -310,7 +310,7 @@
+ 
+ RCOPY	= cp -r
+ 
+-COPTS	= -ansi -pedantic -Wall -O3
++COPTS	= -ansi -pedantic -Wall $(RPM_OPT_FLAGS)
+ 
+ CFLAGS	= -DOS_UNIX=$(OSUNIX)					\
+ 	  -DOS_DOS=$(OSDOS)					\
+@@ -358,91 +358,96 @@
+ install: lout prg2lout
+ 	@echo ""
+ 	@echo "(a) Installing lout and prg2lout binaries into BINDIR $(BINDIR)"
+-	cp lout $(BINDIR)/lout
+-	chmod 755 $(BINDIR)/lout
+-	cp prg2lout $(BINDIR)/prg2lout
+-	chmod 755 $(BINDIR)/prg2lout
++	cp lout $(DESTDIR)$(BINDIR)/lout
++	chmod 755 $(DESTDIR)$(BINDIR)/lout
++	cp prg2lout $(DESTDIR)$(BINDIR)/prg2lout
++	chmod 755 $(DESTDIR)$(BINDIR)/prg2lout
+ 	@echo ""
+ 	@echo "(b) Installing library files into LIBDIR $(LIBDIR)"
+-	mkdir $(LIBDIR)
+-	chmod 755 $(LIBDIR)
++	mkdir $(DESTDIR)$(LIBDIR)
++	chmod 755 $(DESTDIR)$(LIBDIR)
+ 	@echo ""
+-	mkdir $(LIBDIR)/$(LIBINCL)
+-	chmod 755 $(LIBDIR)/$(LIBINCL)
+-	cp include/* $(LIBDIR)/$(LIBINCL)
+-	chmod 644 $(LIBDIR)/$(LIBINCL)/*
+-	@echo ""
+-	mkdir $(LIBDIR)/$(LIBDATA)
+-	chmod 755 $(LIBDIR)/$(LIBDATA)
+-	cp data/* $(LIBDIR)/$(LIBDATA)
+-	chmod 644 $(LIBDIR)/$(LIBDATA)/*
+-	@echo ""
+-	mkdir $(LIBDIR)/$(LIBHYPH)
+-	chmod 755 $(LIBDIR)/$(LIBHYPH)
+-	cp hyph/* $(LIBDIR)/$(LIBHYPH)
+-	chmod 644 $(LIBDIR)/$(LIBHYPH)/*
+-	@echo ""
+-	mkdir $(LIBDIR)/$(LIBFONT)
+-	chmod 755 $(LIBDIR)/$(LIBFONT)
+-	cp font/* $(LIBDIR)/$(LIBFONT)
+-	chmod 644 $(LIBDIR)/$(LIBFONT)/*
+-	@echo ""
+-	mkdir $(LIBDIR)/$(LIBMAPS)
+-	chmod 755 $(LIBDIR)/$(LIBMAPS)
+-	cp maps/* $(LIBDIR)/$(LIBMAPS)
+-	chmod 644 $(LIBDIR)/$(LIBMAPS)/*
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBINCL)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBINCL)
++	cp include/* $(DESTDIR)$(LIBDIR)/$(LIBINCL)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBINCL)/*
++	@echo ""
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBDATA)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBDATA)
++	cp data/* $(DESTDIR)$(LIBDIR)/$(LIBDATA)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBDATA)/*
++	@echo ""
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBHYPH)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBHYPH)
++	cp hyph/* $(DESTDIR)$(LIBDIR)/$(LIBHYPH)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBHYPH)/*
++	@echo ""
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBFONT)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBFONT)
++	cp font/* $(DESTDIR)$(LIBDIR)/$(LIBFONT)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBFONT)/*
++	@echo ""
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBMAPS)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBMAPS)
++	cp maps/* $(DESTDIR)$(LIBDIR)/$(LIBMAPS)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBMAPS)/*
+ 	@echo ""
+-	mkdir $(LIBDIR)/$(LIBLOCA)
+-	chmod 755 $(LIBDIR)/$(LIBLOCA)
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBLOCA)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)
+ 	@echo ""
+ 	@echo "(c) Initializing run (should be silent, no errors expected)"
+-	$(BINDIR)/lout -x -s $(LIBDIR)/$(LIBINCL)/init
++	$(DESTDIR)$(BINDIR)/lout -x -s $(DESTDIR)$(LIBDIR)/include/init \
++		  -I$(DESTDIR)$(LIBDIR)/include \
++		  -D$(DESTDIR)$(LIBDIR)/data \
++		  -F$(DESTDIR)$(LIBDIR)/font \
++		  -H$(DESTDIR)$(LIBDIR)/hyph \
++		  -C$(DESTDIR)$(LIBDIR)/maps 
+ 	@echo ""
+ 	@echo "(d) Changing mode of files just created by initializing run"
+-	chmod 644 $(LIBDIR)/$(LIBDATA)/*
+-	chmod 644 $(LIBDIR)/$(LIBHYPH)/*
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBDATA)/*
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBHYPH)/*
+ 
+ installman:
+ 	@echo ""
+ 	@echo "Installing manual entries into MANDIR $(MANDIR)"
+ 	sed -e "s@<BINDIR>@$(BINDIR)@" -e "s@<LIBDIR>@$(LIBDIR)@"	\
+ 	    -e "s@<DOCDIR>@$(DOCDIR)@" -e "s@<MANDIR>@$(MANDIR)@"	\
+-	man/lout.1 > $(MANDIR)/lout.1
+-	chmod 644 $(MANDIR)/lout.1
+-	cp man/prg2lout.1 $(MANDIR)/prg2lout.1
+-	chmod 644 $(MANDIR)/prg2lout.1
++	man/lout.1 > $(DESTDIR)$(MANDIR)/lout.1
++	chmod 644 $(DESTDIR)$(MANDIR)/lout.1
++	cp man/prg2lout.1 $(DESTDIR)$(MANDIR)/prg2lout.1
++	chmod 644 $(DESTDIR)$(MANDIR)/prg2lout.1
+ 
+ installdoc:
+ 	@echo ""
+ 	@echo "Creating DOCDIR $(DOCDIR) and copying documentation into it"
+-	$(RCOPY) doc $(DOCDIR)
+-	chmod 755 $(DOCDIR)
+-	chmod 755 $(DOCDIR)/*
+-	chmod 644 $(DOCDIR)/*/*
++	$(RCOPY) doc $(DESTDIR)$(DOCDIR)
++	chmod 755 $(DESTDIR)$(DOCDIR)
++	chmod 755 $(DESTDIR)$(DOCDIR)/*
++	chmod 644 $(DESTDIR)$(DOCDIR)/*/*
+ 
+ installfr:
+ 	@echo ""
+ 	@echo "Putting French error messages into $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)"
+-	mkdir $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)
+-	chmod 755 $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)
+-	mkdir $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES
+-	chmod 755 $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES
+-	cp locale/msgs.fr $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/msgs.$(LOC_FR)
+-	gencat $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/errors.$(LOC_FR)	\
+-	       $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/msgs.$(LOC_FR)
+-	chmod 644 $(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/*
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES
++	cp locale/msgs.fr $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/msgs.$(LOC_FR)
++	gencat $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/errors.$(LOC_FR)	\
++	       $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/msgs.$(LOC_FR)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_FR)/LC_MESSAGES/*
+ 
+ installde:
+ 	@echo ""
+ 	@echo "Putting German error messages into $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)"
+-	mkdir $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)
+-	chmod 755 $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)
+-	mkdir $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES
+-	chmod 755 $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES
+-	cp locale/msgs.de $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/msgs.$(LOC_DE)
+-	gencat $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/errors.$(LOC_DE)	\
+-	       $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/msgs.$(LOC_DE)
+-	chmod 644 $(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/*
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)
++	mkdir $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES
++	chmod 755 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES
++	cp locale/msgs.de $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/msgs.$(LOC_DE)
++	gencat $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/errors.$(LOC_DE)	\
++	       $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/msgs.$(LOC_DE)
++	chmod 644 $(DESTDIR)$(LIBDIR)/$(LIBLOCA)/$(LOC_DE)/LC_MESSAGES/*
+ 
+ uninstall:
+ 	-rm -f  $(BINDIR)/lout $(BINDIR)/prg2lout
