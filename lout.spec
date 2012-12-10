@@ -69,7 +69,7 @@ mv $RPM_BUILD_ROOT/usr/man $RPM_BUILD_ROOT%{_datadir}
 
 # remove unwanted files
 rm -rf $RPM_BUILD_ROOT/%_prefix/doc
-rm -rf %{_builddir}/%name-%version/doc/user/.pie_intr.swp
+rm -rf $RPM_BUILD_DIR/%name-%version/doc/user/.pie_intr.swp
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,4 +86,51 @@ rm -rf $RPM_BUILD_ROOT
 %files doc
 %defattr(0644,root,root,755)
 %doc doc/
+
+
+
+%changelog
+* Fri Dec 10 2010 Oden Eriksson <oeriksson@mandriva.com> 3.31-7mdv2011.0
++ Revision: 620258
+- the mass rebuild of 2010.0 packages
+
+* Fri Sep 04 2009 Thierry Vignaud <tv@mandriva.org> 3.31-6mdv2010.0
++ Revision: 429869
+- rebuild
+
+* Mon Jul 28 2008 Thierry Vignaud <tv@mandriva.org> 3.31-5mdv2009.0
++ Revision: 251402
+- rebuild
+
+  + Olivier Blin <oblin@mandriva.com>
+    - restore BuildRoot
+
+* Mon Dec 17 2007 Thierry Vignaud <tv@mandriva.org> 3.31-3mdv2008.1
++ Revision: 129460
+- kill re-definition of %%buildroot on Pixel's request
+
+
+* Wed May 24 2006 Pascal Terjan <pterjan@mandriva.com> 3.31-3mdk
+- better fix (have data in /usr/share, not /usr/lib)
+
+* Wed May 24 2006 Pascal Terjan <pterjan@mandriva.com> 3.31-2mdk
+- fix build on x86_64
+
+* Mon Dec 19 2005 Lenny Cartier <lenny@mandriva.com> 3.31-1mdk
+- 3.31
+
+* Mon Nov 15 2004 Lenny Cartier <lenny@mandrakesoft.com> 3.30-1mdk
+- 3.30
+
+* Fri Jun 18 2004 Lenny Cartier <lenny@mandrakesoft.com> 3.29-1mdk
+- regenerate patch
+
+* Sat Dec 13 2003 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 3.25-5mdk
+- compile with optimizations on sparc
+- spec cosmetics
+
+* Wed Jul 23 2003 Per Øyvind Karlsen <peroyvind@sintrax.net> 3.25-4mdk
+- rm -rf $RPM_BUILD_ROOT in %%install, not %%prep
+- use %%make macro
+- use %%makeinstall_std macro
 
