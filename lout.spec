@@ -10,7 +10,7 @@ Group:		Text tools
 Source0:	ftp://ftp.cs.usyd.edu.au/jeff/lout/%{name}-%{version}.tar.bz2
 Patch0:		lout-makefile.patch
 License:	GPL
-Url:		http://lout.sourceforge.net/
+Url:		https://lout.sourceforge.net/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
